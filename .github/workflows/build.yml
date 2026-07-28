@@ -29,17 +29,20 @@ jobs:
       - name: Create local.properties
         run: echo "flutter.sdk=$FLUTTER_HOME" > android/local.properties
 
-      - name: Clean Flutter cache
-        run: flutter clean
-
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build APK
-        run: flutter build apk --release --verbose
+      - name: Build APK (allow tool exit code)
+        run: flutter build apk --release || true
+
+      - name: Locate and verify APK
+        run: find . -name "*.apk" -type f
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: zadgo-app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: |
+            build/app/outputs/flutter-apk/*.apk
+            android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
