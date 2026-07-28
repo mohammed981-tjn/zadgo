@@ -32,8 +32,8 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build APK (allow tool exit code)
-        run: flutter build apk --release || true
+      - name: Build APK
+        run: flutter build apk --release
 
       - name: Search for APK everywhere
         run: find / -name "*.apk" -type f 2>/dev/null || echo "No APK found anywhere"
